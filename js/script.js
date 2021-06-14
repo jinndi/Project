@@ -10,13 +10,12 @@ const personalMovieDB ={
 
 let i=1;
 while(i<3){
-  let lastFilms = prompt("Один из последних просмотренных фильмов?","");
-  let l = lastFilms.length;
-    if(l>50 || l==0){
-        i=1;
+  let lastFilms = prompt("Один из последних просмотренных фильмов?",""),
+  ocenka = prompt("На сколько оцените его?","");
+    if(lastFilms=="" || ocenka=="" || lastFilms == null || ocenka== null || lastFilms.length>50){
+        i--;
         continue;
     }
-  let ocenka = prompt("На сколько оцените его?","");
   personalMovieDB.movies[lastFilms]  = ocenka;
   i++;
 }
