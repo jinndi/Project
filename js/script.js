@@ -34,38 +34,63 @@ document.addEventListener('DOMContentLoaded', () => {
         ganre = poster.querySelector(".promo__genre"),
         movieList = document.querySelector(".promo__interactive-list"),
         sform = document.querySelector('form.add'),
-        sinput = sform.querySelector('.adding__input'),
+        sinput = sform.querySelector('input.adding__input'),
         scheckbox = sform.querySelector('[type="checkbox"]');
 
-    adv.forEach(item => {
-        item.remove();
+    sform.addEventListener('submit', (e) =>{
+        e.preventDefault();
+        let nText = sinput.value;
+        if (nText){
+            if(nText.length >21){
+                nText = `${nText.substring(0,21)}...`;
+            }
+            movieDB.movies.push(nText);
+            arrSort(movieDB.movies);
+            movieListGen(movieDB.movies, movieList);
+            if(scheckbox.checked){
+                  console.log('Добавляем любимый фильм');
+            }
+        }
+        e.target.reset();
     });
-    ganre.textContent = "ДРАМА";
-    poster.style.backgroundImage = "url(img/bg.jpg)";
 
-    function movieGen() {
-        movieList.innerHTML = "";
+    const advRemove = (adv)=>{
+        adv.forEach(item => {
+            item.remove();
+        });
+    };
 
-        movieDB.movies.sort();
+    const makeChanges = ()=>{
+        ganre.textContent = "ДРАМА";
+        poster.style.backgroundImage = "url(img/bg.jpg)"; 
+    };
 
-        movieDB.movies.forEach((films, n) => {
-            movieList.innerHTML += `
-        <li class="promo__interactive-item">${n+1} ${films}
+    const arrSort = (arr)=>{
+        arr.sort();
+    };
+
+    function movieListGen(films, parent) 
+    {
+        parent.innerHTML = "";
+        arrSort(films);
+        films.forEach((film, n) => {
+            parent.innerHTML += `
+        <li class="promo__interactive-item">${n+1} ${film}
          <div class="delete"></div>
         </li>   
         `;
+         });
+
+        document.querySelectorAll('.delete').forEach((element, i) =>{
+            element.addEventListener('click', ()=>{
+                element.parentElement.remove();
+                movieDB.movies.splice(i,1);
+                movieListGen(films, parent);
+            });
         });
     }
-
-    movieGen();
- 
-    sform.addEventListener('submit', (e) =>{
-        e.preventDefault();
-        movieDB.movies.push(sinput.value);
-        movieGen();
-        if(scheckbox.checked){
-            console.log('Добавляем любимый фильм');
-        }
-        sform.reset();
-     });
+     advRemove(adv);
+     makeChanges();
+     movieListGen(movieDB.movies, movieList);
 });
+
