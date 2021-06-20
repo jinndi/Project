@@ -137,5 +137,38 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     window.addEventListener('scroll', showModalByScroll);
 
+    // Card
 
+    class MenuItem {
+
+        constructor(img, subtitle, descr, cost){
+            this.img = img;
+            this.subtitle = subtitle;
+            this.descr = descr;
+            this.cost = cost;
+            this.item ='';
+        } 
+        cardGen (){
+            const menu = document.querySelector('[data-menu]'),
+            card = document.createElement('div');
+            card.classList.add('menu__item');
+            this.item = `   <img src="img/tabs/${this.img}.jpg" alt="${this.img}">
+                <h3 class="menu__item-subtitle">Меню "${this.subtitle}"</h3>
+                <div class="menu__item-descr">${this.descr}</div>
+                <div class="menu__item-divider"></div>
+                <div class="menu__item-price">
+                    <div class="menu__item-cost">Цена:</div>
+                    <div class="menu__item-total"><span>${this.cost}</span> грн/день</div>
+                </div>`; 
+            card.innerHTML = this.item;
+            menu.append(card); 
+        }
+    }
+
+    const vegy = new MenuItem('vegy', 'Фитнес', 'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!', '229' );
+    const lite = new MenuItem('elite', 'Премиум', 'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!', '550' );
+    const post = new MenuItem('post', 'Постное', 'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.', '430' );
+        vegy.cardGen();
+        lite.cardGen();
+        post.cardGen();
 });
