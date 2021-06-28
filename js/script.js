@@ -194,25 +194,31 @@ window.addEventListener('DOMContentLoaded', () => {
                 margin: 0 auto;
             `;
             form.insertAdjacentElement('afterend', statusMessage);
-            const r = new XMLHttpRequest();
-            r.open ('POST', 'server.php');
-            r.setRequestHeader('Content-type', 'application/json');
+
             const formData = new FormData(form);
             const objForm = {};
             formData.forEach (function(val, key){
                 objForm[key] = val;
             });
-            const json = JSON.stringify(objForm);
-            r.send(json);
-            r.addEventListener('load', () => {
-                if(r.status === 200){
-                    console.log(r.response);
-                    showThanksModal(message.succses);
-                    form.reset();
-                    statusMessage.remove();
-                }else{
-                    showThanksModal(message.failure);
-                }
+
+            fetch('server.php', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify(objForm)
+            })
+            .then (data => data.text())
+            .then (data => {
+                console.log (data);
+                showThanksModal(message.succses);
+                statusMessage.remove();              
+            })
+            .catch (() => {
+                showThanksModal(message.failure);
+            })
+            .finally (() => {
+                form.reset();
             });
         });
     }
